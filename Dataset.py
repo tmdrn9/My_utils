@@ -19,7 +19,8 @@ class ClassficationDataset(torch.utils.data.Dataset):
         x_img = Image.open(x_img).convert('RGB')
 
         if self.transforms:
-            x_img = self.transforms(x_img)
+            augmented = self.transforms(image=x_img)
+            x_img = augmented['image']
 
         return x_img, y
 

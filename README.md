@@ -37,3 +37,13 @@ augmentation = albumentations.Compose([
 
 
 두번째 이유로는 속도가 더 빠릅니다 [**[참고 사이트]**](https://pseudo-lab.github.io/Tutorial-Book/chapters/object-detection/Ch3-preprocessing.html)
+
+
+
+## multiTaskLearningNet.py
+
+multi task learning 시 불러서 사용하는 네트워크 모듈
+
+-- 수정중--
+
+

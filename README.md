@@ -39,11 +39,40 @@ augmentation = albumentations.Compose([
 두번째 이유로는 속도가 더 빠릅니다 [**[참고 사이트]**](https://pseudo-lab.github.io/Tutorial-Book/chapters/object-detection/Ch3-preprocessing.html)
 
 
+## utils.py
+
+
+````
+# cutmix 사용 예시
+
+for e in range(0, n_epochs):
+    ###################
+    # train the model #
+    ###################
+    model.train()
+    for data, labels in tqdm(train_dataloader):
+        # move tensors to GPU if CUDA is available
+        data, labels = data.to(device), labels.to(device)
+        
+        if np.random.random()>0.5:
+            lam = np.random.beta(1.0, 1.0)
+            rand_index = torch.randperm(data.size()[0]).to(device)
+            target_a = labels
+            target_b = labels[rand_index]            
+            bbx1, bby1, bbx2, bby2 = rand_bbox(data.size(), lam)
+            data[:, :, bbx1:bbx2, bby1:bby2] = data[rand_index, :, bbx1:bbx2, bby1:bby2]
+            lam = 1 - ((bbx2 - bbx1) * (bby2 - bby1) / (data.size()[-1] * data.size()[-2]))
+            logits = model(data)
+            loss = criterion(logits, target_a) * lam + criterion(logits, target_b) * (1. - lam)
+
+        else :
+            logits = model(data)
+            loss = criterion(logits, labels)
+
+````
 
 ## multiTaskLearningNet.py
 
 multi task learning 시 불러서 사용하는 네트워크 모듈
 
 -- 수정중--
-
-

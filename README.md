@@ -41,6 +41,13 @@ augmentation = albumentations.Compose([
 
 ## utils.py
 
+get_mean_std : Nomalize하기 위해 평균과 표준편차를 계산해주는 함수
+
+imshow : 이미지의 shape이 C,W,H일때 시각화해주는 함수
+
+check_dataloader : dataloader가 잘 작동하는지, Data와 Label이 맞게 나오는지 확인하는 함수
+
+rand_bbox : cutmix하기 위해 필요한 함수
 
 ````
 # cutmix 사용 예시

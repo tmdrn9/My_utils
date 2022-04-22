@@ -108,9 +108,8 @@ for e in range(0, n_epochs):
     ###################
     model.train()
     for inputs, targets in tqdm(train_dataloader):
-
-        x, y = inputs.to(device), targets.to(device)
         # move tensors to GPU if CUDA is available
+        x, y = inputs.to(device), targets.to(device)
         
         x, targets_a, targets_b, lam = mixup_data(x, y, 1)
         outputs = model(x)

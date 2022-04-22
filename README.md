@@ -49,6 +49,8 @@ check_dataloader : dataloader가 잘 작동하는지, Data와 Label이 맞게 �
 
 rand_bbox : cutmix하기 위해 필요한 함수
 
+mixup_criterion,mixup_data : mixup하기 위해 필요한 함수
+
 ````
 # cutmix 사용 예시
 
@@ -60,8 +62,8 @@ for e in range(0, n_epochs):
     for data, labels in tqdm(train_dataloader):
         # move tensors to GPU if CUDA is available
         data, labels = data.to(device), labels.to(device)
-        
-        if np.random.random()>0.5:
+
+        if np.random.random()>0.5 and e < 70 :
             lam = np.random.beta(1.0, 1.0)
             rand_index = torch.randperm(data.size()[0]).to(device)
             target_a = labels
@@ -76,6 +78,53 @@ for e in range(0, n_epochs):
             logits = model(data)
             loss = criterion(logits, labels)
 
+        optimizer.zero_grad()
+        # backward pass: compute gradient of the loss with respect to model parameters
+        loss.backward()
+        # perform a single optimization step (parameter update)
+        optimizer.step()
+        # update training loss
+        train_loss[e] += loss.item()
+        # update training score
+        logits=logits.argmax(1).detach().cpu().numpy().tolist()
+        labels=labels.detach().cpu().numpy().tolist()
+
+        train_F1[e] += score_function(labels,logits)
+
+    train_loss[e] /= len(train_dataloader)
+    train_F1[e] /= len(train_dataloader)
+
+    #validation은 기본과 동일
+    
+````
+
+
+````
+# mixup  예시
+
+for e in range(0, n_epochs):
+    ###################
+    # train the model #
+    ###################
+    model.train()
+    for inputs, targets in tqdm(train_dataloader):
+
+        x, y = inputs.to(device), targets.to(device)
+        # move tensors to GPU if CUDA is available
+        
+        x, targets_a, targets_b, lam = mixup_data(x, y, 1)
+        outputs = model(x)
+        loss = mixup_criterion(criterion, outputs, targets_a, targets_b, lam)
+        
+        optimizer.zero_grad()
+        # backward pass: compute gradient of the loss with respect to model parameters
+        loss.backward()
+        # perform a single optimization step (parameter update)
+        optimizer.step()
+        
+   #validation은 기본과 동일
+   #train loss와 accuracy는 프린트하지 않음
+   
 ````
 
 ## multiTaskLearningNet.py

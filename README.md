@@ -130,4 +130,4 @@ for e in range(0, n_epochs):
 
 multi task learning 시 불러서 사용하는 네트워크 모듈
 
--- 수정중--
+--> 수정중 <--

@@ -2,36 +2,35 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-def get_mean_std(train_path):
+def get_mean_std(data_path):
 
     """
     이미지 정규화하기 위해 평균과 표준편차를 구하는 함수
-
-    :param train_path: 데이터 주소 리스트, ImageFolder사용 시에는 데이터 주소 String
+    :param data_path: 데이터 주소 리스트, ImageFolder사용 시에는 데이터 주소 String
     :return: 데이터셋의 채널별 평균과 표준편차
-
     """
 
     meanRGB = np.array([0,0,0], np.float64)
     stdRGB = np.array([0,0,0], np.float64)
 
-    for i in train_path:
+    for i in data_path:
 
         x_img = cv2.imread(i)
         x_img = cv2.cvtColor(x_img, cv2.COLOR_BGR2RGB)
-        x_img = x_img.astype(np.float32)/255.0
+        x_img = x_img.astype(np.float64)/255.0
 
         meanRGB += np.mean(x_img, axis=(0,1))
         stdRGB += np.std(x_img, axis=(0,1))
 
-    meanRGB /= len(data_dir_list)
-    stdRGB /= len(data_dir_list)
+    meanRGB /= len(data_path)
+    stdRGB /= len(data_path)
 
     print("평균 : ", meanRGB[0], meanRGB[1], meanRGB[2])
     print("표준편차 : ", stdRGB[0], stdRGB[1], stdRGB[2])
+    
 
     # # imageFolder로 데이터 불러오기
-    # train_ds = datasets.ImageFolder(root = train_path, transform=transforms.ToTensor())
+    # train_ds = datasets.ImageFolder(root = data_path, transform=transforms.ToTensor())
     # meanRGB = [np.mean(x.numpy(), axis=(1,2)) for x,_ in train_ds]
     # stdRGB = [np.std(x.numpy(), axis=(1,2)) for x,_ in train_ds]
 

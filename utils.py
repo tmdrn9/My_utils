@@ -2,12 +2,12 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-def get_mean_std(data_dir_list):
+def get_mean_std(train_path):
 
     """
     이미지 정규화하기 위해 평균과 표준편차를 구하는 함수
 
-    :param data_dir_list: 데이터 주소 리스트
+    :param train_path: 데이터 주소 리스트, ImageFolder사용 시에는 데이터 주소 String
     :return: 데이터셋의 채널별 평균과 표준편차
 
     """
@@ -15,10 +15,11 @@ def get_mean_std(data_dir_list):
     meanRGB = np.array([0,0,0], np.float64)
     stdRGB = np.array([0,0,0], np.float64)
 
-    for i in data_dir_list:
+    for i in train_path:
 
         x_img = cv2.imread(i)
         x_img = cv2.cvtColor(x_img, cv2.COLOR_BGR2RGB)
+        x_img = x_img.astype(np.float32)/255.0
 
         meanRGB += np.mean(x_img, axis=(0,1))
         stdRGB += np.std(x_img, axis=(0,1))

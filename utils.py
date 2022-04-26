@@ -29,8 +29,24 @@ def get_mean_std(data_dir_list):
     print("평균 : ", meanRGB[0], meanRGB[1], meanRGB[2])
     print("표준편차 : ", stdRGB[0], stdRGB[1], stdRGB[2])
 
-    return meanRGB, stdRGB
+    # # imageFolder로 데이터 불러오기
+    # train_ds = datasets.ImageFolder(root = train_path, transform=transforms.ToTensor())
+    # meanRGB = [np.mean(x.numpy(), axis=(1,2)) for x,_ in train_ds]
+    # stdRGB = [np.std(x.numpy(), axis=(1,2)) for x,_ in train_ds]
 
+    # # 이미지 각 mean과 std의 전체적인 평균 값
+    # meanR = np.mean([m[0] for m in meanRGB])
+    # meanG = np.mean([m[1] for m in meanRGB])
+    # meanB = np.mean([m[2] for m in meanRGB])
+
+    # stdR = np.mean([s[0] for s in stdRGB])
+    # stdG = np.mean([s[1] for s in stdRGB])
+    # stdB = np.mean([s[2] for s in stdRGB])
+
+    # print(meanR, meanG, meanB)
+    # print(stdR, stdG, stdB)
+    
+    
 def imshow(img,mean=0,std=1):
     """
     :param img: 시각화하고자 하는 이미지

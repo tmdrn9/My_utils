@@ -129,3 +129,17 @@ def mixup_data(x, y, alpha=1.0, use_cuda=True):
     mixed_x = lam * x + (1 - lam) * x[index, :]
     y_a, y_b = y, y[index]
     return mixed_x, y_a, y_b, lam
+
+def predict(model, test_loader, device):
+    model.eval()
+    model_pred = []
+    with torch.no_grad():
+        for img in tqdm(iter(test_loader)):
+            img = img.float().to(device)
+
+            pred_logit = model(img)
+            pred_logit = pred_logit.squeeze(1).detach().cpu()
+
+            model_pred.extend(pred_logit.tolist())
+            
+    return model_pred

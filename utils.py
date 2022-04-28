@@ -132,7 +132,10 @@ def mixup_data(x, y, alpha=1.0, use_cuda=True):
 
 def predict(model, test_loader, device):
     """
-    Inference 
+    Inference 함수
+    :param model: Inference시 사용할 model
+    :param test_loader: Inference할 데이터의 loader
+    :param device: torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')의 값
     """
     model.eval()
     model_pred = []

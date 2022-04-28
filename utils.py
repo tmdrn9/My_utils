@@ -131,6 +131,9 @@ def mixup_data(x, y, alpha=1.0, use_cuda=True):
     return mixed_x, y_a, y_b, lam
 
 def predict(model, test_loader, device):
+    """
+    Inference 
+    """
     model.eval()
     model_pred = []
     with torch.no_grad():

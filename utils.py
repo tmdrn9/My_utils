@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+import ttach
 
 def get_mean_std(data_path):
 
@@ -149,3 +150,21 @@ def predict(model, test_loader, device):
             model_pred.extend(pred_logit.tolist())
             
     return model_pred
+
+
+class myScale(ttach.Scale):
+    ''' ttach.Scale함수는 input,output 크기가 달라서 같게 메소드 오버라이딩 '''
+    def apply_aug_image(self, image, scale=1, **kwargs):
+        image_h,image_w=image.shape[2], image.shape[3]
+        if scale != self.identity_param:
+            image = ttach.functional.scale(
+                image,
+                scale,
+                interpolation=self.interpolation,
+                align_corners=self.align_corners,
+            )
+            if image.shape[2]>=image_h:
+                image=ttach.functional.center_crop(image, image_h, image_w)
+            else :
+                image=ttach.functional.resize(image, (image_h,image_w))
+        return image
